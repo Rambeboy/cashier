@@ -307,7 +307,7 @@
 
       const now = new Date();
       const timestamp = now.toLocaleString();
-      let struk = `======== WARKOP IYAH ========\nTanggal: ${timestamp}\n\n`;
+      let struk = `========== WARKOP IYAH ==========\nTanggal: ${timestamp}\n\n`;
       let grandTotal = 0;
 
       cart.forEach((item, i) => {
@@ -316,7 +316,7 @@
         struk += `${i + 1}. ${item.name.toUpperCase()} x${item.qty} = Rp ${total}\n`;
       });
 
-      struk += `\nTotal Bayar: Rp ${grandTotal}\n\nTerima kasih telah berbelanja!\n`;
+      struk += `====================\nTotal Bayar: Rp ${grandTotal}\n\nTerima kasih telah berbelanja!\n`;
 
       document.getElementById("receiptContent").textContent = struk;
 
