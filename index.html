@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kasir Warkop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KASIR WARKOP IYAH</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -76,8 +76,8 @@
     td button:hover { background: #b52a36; }
 
     #total {
-      text-align: left;
-      font-size: 18px;
+      text-align: center;
+      font-size: 20px;
       margin-top: 15px;
       font-weight: bold;
       color: #333;
@@ -98,6 +98,20 @@
     .checkout-btn:hover { background: #1e7e34; }
     .hidden { display: none; }
 
+    #receipt {
+      display: none;
+    }
+
+    #notif {
+      background: #28a745;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      margin-top: 20px;
+      border-radius: 10px;
+      display: none;
+    }
+
     @media (max-width: 600px) {
       .form-group select,
       .form-group input,
@@ -106,7 +120,6 @@
       }
     }
 
-    /* For print */
     @media print {
       body * {
         visibility: hidden;
@@ -121,8 +134,8 @@
         box-shadow: none;
         border-radius: 0;
       }
-      .table-wrapper {
-        margin-top: 0;
+      #receipt {
+        display: block !important;
       }
     }
   </style>
@@ -157,7 +170,6 @@
 
       <select id="itemQty">
         <option value="" disabled selected>Jumlah</option>
-        <!-- Generate angka 1-20 -->
         <script>
           for (let i = 1; i <= 20; i++) {
             document.write(`<option value="${i}">${i}</option>`);
@@ -190,6 +202,7 @@
         <button class="checkout-btn" onclick="checkout()">Check Out</button>
       </div>
     </div>
+    <div id="notif">Transaksi selesai!</div>
   </div>
 
   <div id="receipt" class="print-section hidden">
@@ -218,13 +231,13 @@
       "SUSU KAMBING": 10000
     };
 
+    const formatRupiah = (num) => {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    };
+
     function autoFillPrice() {
       const name = document.getElementById("itemName").value;
-      if (priceMap[name]) {
-        document.getElementById("itemPrice").value = priceMap[name];
-      } else {
-        document.getElementById("itemPrice").value = '';
-      }
+      document.getElementById("itemPrice").value = priceMap[name] || '';
     }
 
     let cart = [];
@@ -249,11 +262,15 @@
 
     function renderCart() {
       const cartSection = document.getElementById('cartSection');
-      cartSection.classList.remove('hidden');
-
       const tbody = document.querySelector('#cartTable tbody');
       tbody.innerHTML = '';
       let total = 0;
+
+      if (cart.length > 0) {
+        cartSection.classList.remove('hidden');
+      } else {
+        cartSection.classList.add('hidden');
+      }
 
       cart.forEach((item, index) => {
         const row = document.createElement('tr');
@@ -262,15 +279,16 @@
         tdName.textContent = item.name.toUpperCase();
 
         const tdPrice = document.createElement('td');
-        tdPrice.textContent = `Rp ${item.price}`;
+        tdPrice.textContent = `Rp ${formatRupiah(item.price)}`;
 
         const tdQty = document.createElement('td');
         tdQty.textContent = item.qty;
 
         const rowTotal = item.price * item.qty;
         total += rowTotal;
+
         const tdTotal = document.createElement('td');
-        tdTotal.textContent = `Rp ${rowTotal}`;
+        tdTotal.textContent = `Rp ${formatRupiah(rowTotal)}`;
 
         const tdAction = document.createElement('td');
         const delBtn = document.createElement('button');
@@ -283,20 +301,15 @@
         row.appendChild(tdQty);
         row.appendChild(tdTotal);
         row.appendChild(tdAction);
-
         tbody.appendChild(row);
       });
 
-      document.getElementById('total').innerText = `Total Belanja: Rp ${total}`;
+      document.getElementById('total').innerText = `TOTAL BELANJA: Rp ${formatRupiah(total)}`;
     }
 
     function removeItem(index) {
       cart.splice(index, 1);
       renderCart();
-
-      if (cart.length === 0) {
-        document.getElementById('cartSection').classList.add('hidden');
-      }
     }
 
     function checkout() {
@@ -307,22 +320,33 @@
 
       const now = new Date();
       const timestamp = now.toLocaleString();
-      let struk = `========== WARKOP IYAH ==========\nTanggal: ${timestamp}\n\n`;
+      let struk = `======== WARKOP IYAH ========\nTanggal: ${timestamp}\n\n`;
       let grandTotal = 0;
 
       cart.forEach((item, i) => {
         const total = item.price * item.qty;
         grandTotal += total;
-        struk += `${i + 1}. ${item.name.toUpperCase()} x${item.qty} = Rp ${total}\n`;
+        struk += `${i + 1}. ${item.name.toUpperCase()} x${item.qty} = Rp ${formatRupiah(total)}\n`;
       });
 
-      struk += `=================================\nTotal Bayar: Rp ${grandTotal}\n\nTerima kasih telah berbelanja!\n`;
+      struk += `\nTotal Bayar: Rp ${formatRupiah(grandTotal)}\n\nTerima kasih telah berbelanja!\n`;
 
       document.getElementById("receiptContent").textContent = struk;
-
       document.getElementById("receipt").classList.remove("hidden");
-      window.print();
+
+      setTimeout(() => {
+        window.print();
+      }, 100);
     }
+
+    window.onafterprint = function () {
+      cart = [];
+      renderCart();
+      document.getElementById("receipt").classList.add("hidden");
+      const notif = document.getElementById("notif");
+      notif.style.display = "block";
+      setTimeout(() => { notif.style.display = "none"; }, 3000);
+    };
   </script>
 </body>
 </html>
