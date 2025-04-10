@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kasir Warkop</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Kasir Warung</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
     <h2>KASIR WARKOP</h2>
     <div class="form-group">
-      <input list="itemList" id="itemName" placeholder="Nama Barang">
+      <input list="itemList" id="itemName" placeholder="Nama Barang" />
       <datalist id="itemList">
         <option value="MIE NYEMEK">
         <option value="MIE REBUS">
@@ -31,8 +31,8 @@
         <option value="WEDANG UWUH">
         <option value="SUSU KAMBING">
       </datalist>
-      <input type="number" id="itemPrice" placeholder="Harga (Rp)">
-      <input type="number" id="itemQty" placeholder="Jumlah" value="1" min="1">
+      <input type="number" id="itemPrice" placeholder="Harga (Rp)" readonly />
+      <input type="number" id="itemQty" placeholder="Jumlah" value="1" min="1" />
       <button onclick="addItem()">Tambah</button>
     </div>
 
