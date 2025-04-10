@@ -20,7 +20,7 @@ const priceMap = {
 };
 
 document.getElementById("itemName").addEventListener("input", function () {
-  const name = this.value.trim().toUpperCase();
+  const name = this.value.trim();
   if (priceMap[name]) {
     document.getElementById("itemPrice").value = priceMap[name];
   }
@@ -29,7 +29,7 @@ document.getElementById("itemName").addEventListener("input", function () {
 let cart = [];
 
 function addItem() {
-  const name = document.getElementById('itemName').value.trim().toUpperCase();
+  const name = document.getElementById('itemName').value.trim();
   const price = parseInt(document.getElementById('itemPrice').value);
   const qty = parseInt(document.getElementById('itemQty').value);
 
@@ -57,15 +57,32 @@ function renderCart() {
   cart.forEach((item, index) => {
     const row = document.createElement('tr');
 
-    row.innerHTML = `
-      <td>${item.name}</td>
-      <td>Rp ${item.price}</td>
-      <td>${item.qty}</td>
-      <td>Rp ${item.price * item.qty}</td>
-      <td><button onclick="removeItem(${index})">Hapus</button></td>
-    `;
+    const tdName = document.createElement('td');
+    tdName.textContent = item.name.toUpperCase();
 
-    total += item.price * item.qty;
+    const tdPrice = document.createElement('td');
+    tdPrice.textContent = `Rp ${item.price}`;
+
+    const tdQty = document.createElement('td');
+    tdQty.textContent = item.qty;
+
+    const rowTotal = item.price * item.qty;
+    total += rowTotal;
+    const tdTotal = document.createElement('td');
+    tdTotal.textContent = `Rp ${rowTotal}`;
+
+    const tdAction = document.createElement('td');
+    const delBtn = document.createElement('button');
+    delBtn.textContent = 'Hapus';
+    delBtn.onclick = () => removeItem(index);
+    tdAction.appendChild(delBtn);
+
+    row.appendChild(tdName);
+    row.appendChild(tdPrice);
+    row.appendChild(tdQty);
+    row.appendChild(tdTotal);
+    row.appendChild(tdAction);
+
     tbody.appendChild(row);
   });
 
@@ -88,23 +105,17 @@ function checkout() {
   }
 
   const now = new Date();
-  const timestamp = now.toLocaleString('id-ID');
-
-  let struk = `            STRUK BELANJA\n`;
-  struk += `Tanggal: ${timestamp.padStart(32)}\n`;
-  struk += `----------------------------------------\n`;
-
+  const timestamp = now.toLocaleString();
+  let struk = `=== STRUK BELANJA ===\nTanggal: ${timestamp}\n\n`;
   let grandTotal = 0;
+
   cart.forEach((item, i) => {
     const total = item.price * item.qty;
     grandTotal += total;
-    struk += `${i + 1}. ${item.name}\n   ${item.qty} x Rp${item.price} = Rp${total}\n`;
+    struk += `${i + 1}. ${item.name.toUpperCase()} x${item.qty} = Rp ${total}\n`;
   });
 
-  struk += `----------------------------------------\n`;
-  struk += `TOTAL: Rp.${grandTotal}\n`;
-  struk += `----------------------------------------\n`;
-  struk += `Terima kasih telah berbelanja!\n`;
+  struk += `\nTotal Bayar: Rp ${grandTotal}\n\nTerima kasih telah berbelanja!\n`;
 
   const blob = new Blob([struk], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
