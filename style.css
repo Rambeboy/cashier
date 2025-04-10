@@ -1,6 +1,4 @@
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 body {
   font-family: 'Segoe UI', sans-serif;
   background: #f5f5f5;
@@ -13,13 +11,9 @@ body {
   margin: auto;
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
-h2 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 20px;
-}
+h2 { text-align: center; color: #333; margin-bottom: 20px; }
 .form-group {
   display: flex;
   flex-wrap: wrap;
@@ -43,13 +37,13 @@ h2 {
   border-radius: 8px;
   cursor: pointer;
 }
-.form-group button:hover {
-  background: #0056b3;
-}
+.form-group button:hover { background: #0056b3; }
+
 .table-wrapper {
   overflow-x: auto;
   margin-top: 20px;
 }
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -65,9 +59,7 @@ th {
   background: #007BFF;
   color: white;
 }
-tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
+tr:nth-child(even) { background-color: #f9f9f9; }
 td button {
   padding: 5px 10px;
   background: #dc3545;
@@ -76,9 +68,8 @@ td button {
   border-radius: 5px;
   cursor: pointer;
 }
-td button:hover {
-  background: #b52a36;
-}
+td button:hover { background: #b52a36; }
+
 #total {
   text-align: left;
   font-size: 18px;
@@ -99,12 +90,9 @@ td button:hover {
   font-size: 16px;
   cursor: pointer;
 }
-.checkout-btn:hover {
-  background: #1e7e34;
-}
-.hidden {
-  display: none;
-}
+.checkout-btn:hover { background: #1e7e34; }
+.hidden { display: none; }
+
 @media (max-width: 600px) {
   .form-group input,
   .form-group button {
