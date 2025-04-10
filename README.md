@@ -1,1 +1,1 @@
-# cashier
+# CASHIER
